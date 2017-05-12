@@ -5,7 +5,6 @@
 *.lo
 *.log
 *.o
-*.plist
 *.scan
 *.sdf
 *.status
