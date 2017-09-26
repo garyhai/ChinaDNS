@@ -182,3 +182,20 @@ Mailing list: http://groups.google.com/group/shadowsocks
 [Tomato toolchain]:     http://downloads.linksysbycisco.com/downloads/WRT54GL_v4.30.11_11_US.tgz
 [Travis CI]:            https://travis-ci.org/clowwindy/ChinaDNS
 [DNS pointer mutation method]: https://gist.github.com/klzgrad/f124065c0616022b65e5
+
+```
+/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+brew install autoconf automake
+git clone git@github.com:garyhai/ChinaDNS.git
+cd ChinaDNS
+./autogen.sh
+./configure
+make
+curl 'http://ftp.apnic.net/apnic/stats/apnic/delegated-apnic-latest'; | grep ipv4 | grep CN | awk -F\| '{ printf("%s/%d\n", $4, 32-log($5)/log(2)) }' > chnroute.txt
+brew install dnsmasq
+cp dnsmasq.conf /usr/local/etc/.
+cp chnroute.txt /usr/local/etc/.
+cp src/chinadns /usr/local/sbin/.
+sudo launchctl load /Library/LaunchDaemons/homebrew.mxcl.chinadns.plist
+sudo brew services start dnsmasq
+```
